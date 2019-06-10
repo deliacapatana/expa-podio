@@ -1,0 +1,52 @@
+﻿@model IEnumerable<FmiScheduler.Models.EventCateg>
+@{
+    ViewBag.Title = "Index";
+}
+<h3 class="display-4 text-center mt-2">Lista categoriilor de evenimente</h3>
+
+@if (User.IsInRole("Administrator"))
+{
+    <div class="justify-content-center">
+        @Html.ActionLink("CREEAZĂ O CATEGORIE DE EVENIMENTE NOUĂ", "Create", null, new { @class = "btn btn-link" })
+    </div>
+}
+
+@if (TempData.ContainsKey("message"))
+{
+    <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
+}
+
+
+    <div class="container-fluid">
+        @foreach (var item in Model)
+        {
+
+
+            <div class="card mb-4 mt-4 text-center">
+                <div class="card-body d-block">
+                    <h4 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h4>
+                    @*<h6 class="card-text mb-2 text-muted">De catre: @Html.DisplayFor(mmodelItem => item.User.UserName) </h6>*@ 
+
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    <a href="../EventCategs/Edit/@item.Id" class="card-link btn btn-success">Editează numele categoriei</a>
+                                </div>
+                                @*<a href="../Events/Delete/@item.Id" class="card-link btn btn-danger">Stergere eveniment</a>*@
+                                <div class="col">
+                                    <form method="post" action="/EventCategs/Delete/@item.Id">
+                                        @Html.HttpMethodOverride(HttpVerbs.Delete)
+                                        <button class="card-link btn btn-danger" type="submit">Șterge categoria</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+
+        }
+    </div>
